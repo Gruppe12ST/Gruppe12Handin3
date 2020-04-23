@@ -112,13 +112,96 @@ namespace Microwave.Test.Integration
         #region ButtonStartCancel
 
         [Test]
-        public void ButtonStartCancelUserInterface_Press1()
+        public void ButtonStartCancelUserInterface_Press0()
         {
             _powerButton.Press();
-
-
+            _light.DidNotReceive().TurnOff();
+            _display.DidNotReceive().Clear();
         }
-        
+
+        [Test]
+        public void ButtonStartCancelUserInterface_PressStatePower()
+        {
+            _powerButton.Press();
+            _startCancelButton.Press();
+
+            _light.Received(1).TurnOff();
+            _display.Received(1).Clear();
+        }
+
+        [Test]
+        public void ButtonStartCancelUserInterface_PressStateTime()
+        {
+            
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+
+            _light.Received(1).TurnOn();
+            _cookcontroller.Received(1).StartCooking(50,60);
+        }
+
+        [Test]
+        public void ButtonStartCancelUserInterface_PressStateCooking()
+        {
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+            _startCancelButton.Press();
+            _light.Received(1).TurnOff();
+            _display.Received(1).Clear();
+            _cookcontroller.Received(1).Stop();
+        }
+        #endregion
+
+        #region Door
+
+        [Test]
+        public void DoorUserInterface_DoorOpenReady()
+        {
+            _door.Open();
+            _light.Received(1).TurnOn();
+        }
+
+        [Test]
+        public void DoorUserInterface_DoorOpenSetPower()
+        {
+            _powerButton.Press();
+            _door.Open();
+            _light.Received(1).TurnOn();
+            _display.Received(1).Clear();
+        }
+
+        [Test]
+        public void DoorUserInterface_DoorOpenSetTime()
+        {
+            _powerButton.Press();
+            _timeButton.Press();
+            _door.Open();
+           
+            _light.Received(1).TurnOn();
+            _display.Received(1).Clear();
+        }
+
+        [Test]
+        public void DoorUserInterface_DoorOpenCooking()
+        {
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+            _door.Open();
+
+            _cookcontroller.Received(1).Stop();
+        }
+
+        [Test]
+        public void DoorUserInterface_DoorClosed()
+        {
+            _door.Open();
+            _door.Close();
+
+            _light.Received(1).TurnOff();
+        }
 
         #endregion
 
