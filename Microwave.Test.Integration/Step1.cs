@@ -38,16 +38,16 @@ namespace Microwave.Test.Integration
         [Test]
         public void PowerTubeOutput_TurnOn()
         {
-            _powertube.TurnOn(33);
+            _powertube.TurnOn(100);
             _consoleOutput = stringWriter.ToString();
-            Assert.That(_consoleOutput.Contains("PowerTube works with 33"));
+            Assert.That(_consoleOutput.Contains("PowerTube works with 100"));
 
         }
 
         [Test]
         public void PowerTubeOutput_TurnOff()
         {
-            _powertube.TurnOn(33);
+            _powertube.TurnOn(100);
             _powertube.TurnOff();
             _consoleOutput = stringWriter.ToString();
             Assert.That(_consoleOutput.Contains("PowerTube turned off"));
@@ -59,12 +59,12 @@ namespace Microwave.Test.Integration
             Assert.That(() => _powertube.TurnOn(50), Throws.Nothing);
         }
 
-        [TestCase(101)]
-        [TestCase(0)]
+        [TestCase(701)]
+        [TestCase(49)]
         public void PowerTubeOutput_Exp_OutOfRange(int power)
         {
             var ex = Assert.Catch<ArgumentOutOfRangeException>(() => _powertube.TurnOn(power));
-            StringAssert.Contains("Must be between 1 and 100 (incl.)", ex.Message);
+            StringAssert.Contains("Must be between 50 and 700 (incl.)", ex.Message);
         }
 
         [Test]
